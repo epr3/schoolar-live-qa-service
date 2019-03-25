@@ -6,6 +6,7 @@
    "scripts": {
       "start": "ts-node src/app.ts",
       "dev": "cross-env NODE_ENV=DEV nodemon",
+      "db:init": "ts-node ./node_modules/.bin/typeorm migration:generate -n CreateDatabase",
       "db:migrate": "ts-node ./node_modules/.bin/typeorm migration:run",
       "test:unit": "cross-env NODE_ENV=TEST jest ./tests/unit",
       "test:e2e": "cross-env NODE_ENV=TEST jest --runInBand ./tests/integration",
