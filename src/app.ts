@@ -9,6 +9,11 @@ import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import * as dotenv from 'dotenv';
 
+import answerRoutes from './routes/answer';
+import questionRoutes from './routes/question';
+import ratingRoutes from './routes/rating';
+import sessionRoutes from './routes/session';
+
 dotenv.config();
 
 import pusher from './config/pusher';
@@ -29,7 +34,10 @@ app.use(bodyParser.json());
 const dir = path.join(__dirname, '..', 'uploads');
 app.use(express.static(dir));
 
-// app.use(answerRoutes);
+app.use(answerRoutes);
+app.use(sessionRoutes);
+app.use(ratingRoutes);
+app.use(questionRoutes);
 
 app.get('/pusher', async (req, res) => {
   await pusher.trigger('my-channel', 'my-event', {
