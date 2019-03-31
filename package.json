@@ -4,13 +4,13 @@
    "description": "",
    "main": "./dist/app.js",
    "scripts": {
-      "start": "ts-node src/app.ts",
-      "dev": "cross-env NODE_ENV=DEV nodemon",
-      "db:init": "ts-node ./node_modules/.bin/typeorm migration:generate -n CreateDatabase",
-      "db:migrate": "ts-node ./node_modules/.bin/typeorm migration:run",
-      "test:unit": "cross-env NODE_ENV=TEST jest ./tests/unit",
-      "test:e2e": "cross-env NODE_ENV=TEST jest --runInBand ./tests/integration",
-      "test:all": "cross-env NODE_ENV=TEST jest --runInBand --coverage"
+      "start": "./node_modules/.bin/ts-node src/app.ts",
+      "dev": "./node_modules/.bin/cross-env NODE_ENV=DEV ./node_modules/.bin/nodemon",
+      "db:init": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:generate -n CreateDatabase",
+      "db:migrate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run",
+      "test:unit": "./node_modules/.bin/cross-env NODE_ENV=TEST ./node_modules/.bin/jest ./tests/unit",
+      "test:e2e": "./node_modules/.bin/cross-env NODE_ENV=TEST ./node_modules/.bin/jest --runInBand ./tests/integration",
+      "test:all": "./node_modules/.bin/cross-env NODE_ENV=TEST ./node_modules/.bin/jest --runInBand --coverage"
    },
    "dependencies": {
       "@types/dotenv": "^6.1.0",
