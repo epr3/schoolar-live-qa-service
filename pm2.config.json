@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "live_qa",
+      "script": "./src/app.ts",
+      "watch": true
+    }
+  ]
+}

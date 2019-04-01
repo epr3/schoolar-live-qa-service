@@ -1,9 +1,11 @@
-FROM node:11
+FROM keymetrics/pm2:latest-alpine
 
-COPY . /app
+WORKDIR /usr/src/app
 
-WORKDIR /app
+RUN pm2 install typescript
 
+COPY package*.json ./
 RUN npm install
 
-RUN npm run db:migrate
+COPY . .
+
