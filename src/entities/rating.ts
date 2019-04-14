@@ -15,5 +15,5 @@ export class Rating {
   public id: string;
 
   @Column()
-  public studentId: string;
+  public userId: string;
 }
