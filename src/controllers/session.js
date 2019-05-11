@@ -1,4 +1,4 @@
-const { Session } = require('../models/session');
+const { Session } = require('../models');
 
 module.exports = {
   async getSessions(req, res, next) {
@@ -8,7 +8,7 @@ module.exports = {
       };
       let sessions = [];
       if (query.eventId) {
-        sessions = await Rating.forge()
+        sessions = await Session.forge()
           .where({
             eventId: query.eventId
           })

@@ -1,5 +1,4 @@
-const { Question } = require('../models');
-const { Rating } = require('../models/rating');
+const { Question, Rating } = require('../models');
 
 module.exports = {
   async getQuestions(req, res, next) {
@@ -14,6 +13,14 @@ module.exports = {
             sessionId: query.sessionId
           })
           .fetchAll();
+        questions = await Promise.all(
+          questions.map(async item => {
+            const rating = await Rating.forge()
+              .where({ questionId: item.id })
+              .count();
+            return { ...item.toJSON(), rating };
+          })
+        );
       }
       res.status(200).send(questions);
     } catch (e) {
@@ -25,7 +32,10 @@ module.exports = {
       const question = await Question.forge({ id: req.params.id }).fetch({
         require: true
       });
-      res.status(200).send(...question.toJSON());
+      const rating = await Rating.forge()
+        .where({ questionId: question.id })
+        .count();
+      res.status(200).send({ ...question.toJSON(), rating });
     } catch (e) {
       next(e);
     }
@@ -33,15 +43,15 @@ module.exports = {
   async postQuestion(req, res, next) {
     try {
       const question = await Question.forge({
-        sessionId: req.body.sessionId,
-        description: req.body.description
+        ...req.body
       }).save();
       await Rating.forge({
         questionId: question.id,
-        userId: req.user.id
+        userId: req.body.userId
       }).save();
-      res.status(200).send(question.toJSON());
+      res.status(200).send({ ...question.toJSON(), rating: 1 });
     } catch (e) {
+      console.log(e);
       next(e);
     }
   },

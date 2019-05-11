@@ -41,6 +41,12 @@ exports.up = function(knex, Promise) {
         .uuid('id')
         .primary()
         .defaultTo(uuid());
+      table
+        .uuid('questionId')
+        .references('id')
+        .inTable('questions')
+        .onDelete('SET NULL')
+        .index();
       table.uuid('userId');
     });
 };

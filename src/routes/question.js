@@ -8,7 +8,8 @@ const router = Router();
 
 const questionSchema = yup.object().shape({
   description: yup.string().required(),
-  sessionId: yup.string().required()
+  sessionId: yup.string().required(),
+  userId: yup.string().required()
 });
 
 router.get('/questions', jwtMiddleware, questionController.getQuestions);
