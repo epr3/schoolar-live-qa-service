@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "live_qa",
-      "script": "./src/app.ts",
+      "script": "./src/app.ja",
       "watch": true
     }
   ]
