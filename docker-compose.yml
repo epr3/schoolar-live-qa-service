@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   app:
-    container_name: live_qa
+    container_name: live_qa_service
     build:
       dockerfile: Dockerfile
       context: .
@@ -11,7 +11,7 @@ services:
     env_file: .env
     command: ["npm", "run", "dev"]
     ports:
-      - "3000:3000"
+      - "7000:3000"
 
 networks:
   default:
