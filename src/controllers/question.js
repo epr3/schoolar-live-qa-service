@@ -6,23 +6,24 @@ module.exports = {
       const query = {
         sessionId: req.query.sessionId
       };
-      let questions = [];
+      let questionsObj = [];
       if (query.sessionId) {
         questions = await Question.forge()
           .where({
             sessionId: query.sessionId
           })
-          .fetchAll();
-        questions = await Promise.all(
-          questions.map(async item => {
-            const rating = await Rating.forge()
-              .where({ questionId: item.id })
-              .count();
-            return { ...item.toJSON(), rating };
-          })
-        );
+          .fetchAll({ withRelated: ['answer', 'ratings'] });
+        questionsObj = questions.toJSON().map(item => {
+          const rating = item.ratings.length;
+          delete item.ratings;
+          return {
+            ...item,
+            rating,
+            isVoted: item.userId === req.user.id
+          };
+        });
       }
-      res.status(200).send(questions);
+      res.status(200).send(questionsObj);
     } catch (e) {
       next(e);
     }
@@ -30,12 +31,17 @@ module.exports = {
   async getQuestion(req, res, next) {
     try {
       const question = await Question.forge({ id: req.params.id }).fetch({
-        require: true
+        require: true,
+        withRelated: ['answer', 'ratings']
       });
-      const rating = await Rating.forge()
-        .where({ questionId: question.id })
-        .count();
-      res.status(200).send({ ...question.toJSON(), rating });
+      const questionObj = question.toJSON();
+      const rating = questionObj.ratings.length;
+      delete questionObj.ratings;
+      res.status(200).send({
+        ...questionObj,
+        rating,
+        isVoted: questionObj.userId === req.user.id
+      });
     } catch (e) {
       next(e);
     }
@@ -49,9 +55,14 @@ module.exports = {
         questionId: question.id,
         userId: req.body.userId
       }).save();
-      res.status(200).send({ ...question.toJSON(), rating: 1 });
+      const questionObj = question.toJSON();
+      res.status(200).send({
+        ...questionObj,
+        rating: 1,
+        isVoted: questionObj.userId === req.user.id,
+        answer: null
+      });
     } catch (e) {
-      console.log(e);
       next(e);
     }
   },
@@ -69,10 +80,18 @@ module.exports = {
   async updateQuestion(req, res, next) {
     try {
       const question = await Question.forge({ id: req.params.id }).fetch({
-        require: true
+        require: true,
+        withRelated: ['answer', 'ratings']
       });
       const response = await question.save({ ...req.body });
-      res.status(200).send(...response.toJSON());
+      const responseObj = response.toJSON();
+      const rating = responseObj.ratings.length;
+      delete responseObj.ratings;
+      res.status(200).send({
+        ...responseObj,
+        rating,
+        isVoted: req.user.id === responseObj.userId
+      });
     } catch (e) {
       next(e);
     }

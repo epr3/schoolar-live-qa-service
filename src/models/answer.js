@@ -5,5 +5,8 @@ const Relations = require('bookshelf-schema/lib/relations');
 module.exports = bookshelf.model('Answer', {
   tableName: 'answers',
   uuid: true,
-  schema: [Fields.StringField('description'), Relations.BelongsTo('Question')]
+  schema: [Fields.StringField('description'), Relations.BelongsTo('Question')],
+  question() {
+    return this.belongsTo('Question', 'questionId');
+  }
 });

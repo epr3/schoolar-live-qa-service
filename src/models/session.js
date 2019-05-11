@@ -9,5 +9,8 @@ module.exports = bookshelf.model('Session', {
     Fields.StringField('eventId'),
     Fields.StringField('code'),
     Relations.HasMany('Question', { onDestroy: 'cascade' })
-  ]
+  ],
+  questions() {
+    return this.hasMany('Question', 'sessionId');
+  }
 });

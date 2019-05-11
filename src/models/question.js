@@ -11,5 +11,11 @@ module.exports = bookshelf.model('Question', {
     Relations.BelongsTo('Session'),
     Relations.HasOne('Answer', { onDestroy: 'cascade' }),
     Fields.StringField('userId')
-  ]
+  ],
+  ratings() {
+    return this.hasMany('Rating', 'questionId');
+  },
+  answer() {
+    return this.hasOne('Answer', 'questionId');
+  }
 });
