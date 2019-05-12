@@ -8,7 +8,7 @@ const router = Router();
 
 const ratingSchema = yup.object().shape({
   questionId: yup.string().required(),
-  studentId: yup.string().required()
+  userId: yup.string().required()
 });
 
 router.get('/ratings', jwtMiddleware, ratingController.getRatings);

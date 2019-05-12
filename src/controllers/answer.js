@@ -55,7 +55,7 @@ module.exports = {
       const answer = await Answer.forge({ id: req.params.id }).fetch({
         require: true
       });
-      const response = answer.save({ ...req.body });
+      const response = await answer.save({ ...req.body });
       res.status(200).send(response.toJSON());
     } catch (e) {
       next(e);

@@ -15,11 +15,16 @@ module.exports = {
           .fetchAll({ withRelated: ['answer', 'ratings'] });
         questionsObj = questions.toJSON().map(item => {
           const rating = item.ratings.length;
+          const ratingObj = item.ratings.find(
+            rating => rating.userId === req.user.id
+          );
+          const isVoted = item.userId === req.user.id || !!ratingObj;
           delete item.ratings;
           return {
             ...item,
             rating,
-            isVoted: item.userId === req.user.id
+            isVoted,
+            ratingObj
           };
         });
       }
@@ -36,11 +41,16 @@ module.exports = {
       });
       const questionObj = question.toJSON();
       const rating = questionObj.ratings.length;
+      const ratingObj = questionObj.ratings.find(
+        rating => rating.userId === req.user.id
+      );
+      const isVoted = questionObj.userId === req.user.id || !!ratingObj;
       delete questionObj.ratings;
       res.status(200).send({
         ...questionObj,
         rating,
-        isVoted: questionObj.userId === req.user.id
+        isVoted,
+        ratingObj
       });
     } catch (e) {
       next(e);
@@ -51,7 +61,7 @@ module.exports = {
       const question = await Question.forge({
         ...req.body
       }).save();
-      await Rating.forge({
+      const ratingObj = await Rating.forge({
         questionId: question.id,
         userId: req.body.userId
       }).save();
@@ -60,7 +70,8 @@ module.exports = {
         ...questionObj,
         rating: 1,
         isVoted: questionObj.userId === req.user.id,
-        answer: null
+        answer: null,
+        ratingObj
       });
     } catch (e) {
       next(e);
@@ -85,12 +96,17 @@ module.exports = {
       });
       const response = await question.save({ ...req.body });
       const responseObj = response.toJSON();
+      const ratingObj = responseObj.ratings.find(
+        rating => rating.userId === req.user.id
+      );
       const rating = responseObj.ratings.length;
+      const isVoted = req.user.id === responseObj.userId || !!ratingObj;
       delete responseObj.ratings;
       res.status(200).send({
         ...responseObj,
         rating,
-        isVoted: req.user.id === responseObj.userId
+        isVoted,
+        ratingObj
       });
     } catch (e) {
       next(e);

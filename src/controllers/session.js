@@ -12,23 +12,8 @@ module.exports = {
           .where({
             eventId: query.eventId
           })
-          .fetchAll({
-            withRelated: ['questions', 'questions.ratings', 'questions.answer']
-          });
-        sessionsObj = sessions.toJSON().map(item => {
-          return {
-            ...item,
-            questions: item.questions.map(question => {
-              const rating = question.ratings.length;
-              delete question.ratings;
-              return {
-                ...question,
-                isVoted: req.user.id === item.userId,
-                rating
-              };
-            })
-          };
-        });
+          .fetchAll();
+        sessionsObj = sessions.toJSON();
       }
       res.status(200).send(sessionsObj);
     } catch (e) {
@@ -38,23 +23,10 @@ module.exports = {
   async getSession(req, res, next) {
     try {
       const session = await Session.forge({ id: req.params.id }).fetch({
-        require: true,
-        withRelated: ['questions', 'questions.ratings', 'questions.answer']
+        require: true
       });
       const jsonSession = session.toJSON();
-      const sessionObj = {
-        ...jsonSession,
-        questions: jsonSession.questions.map(item => {
-          const rating = item.ratings.length;
-          delete item.ratings;
-          return {
-            ...item,
-            isVoted: req.user.id === item.userId,
-            rating
-          };
-        })
-      };
-      res.status(200).send(sessionObj);
+      res.status(200).send(jsonSession);
     } catch (e) {
       next(e);
     }

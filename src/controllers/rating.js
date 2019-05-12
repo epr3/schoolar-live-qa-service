@@ -42,8 +42,9 @@ module.exports = {
       const rating = await Rating.forge({ id: req.params.id }).fetch({
         require: true
       });
+      const ratingObj = rating.toJSON();
       await rating.destroy();
-      res.sendStatus(204);
+      res.status(200).send(ratingObj);
     } catch (e) {
       next(e);
     }
