@@ -20,7 +20,7 @@ exports.up = function(knex, Promise) {
         .uuid('sessionId')
         .references('id')
         .inTable('sessions')
-        .onDelete('SET NULL')
+        .onDelete('CASCADE')
         .index();
     })
     .createTable('answers', table => {
@@ -33,7 +33,7 @@ exports.up = function(knex, Promise) {
         .uuid('questionId')
         .references('id')
         .inTable('questions')
-        .onDelete('SET NULL')
+        .onDelete('CASCADE')
         .index();
     })
     .createTable('ratings', table => {
@@ -45,7 +45,7 @@ exports.up = function(knex, Promise) {
         .uuid('questionId')
         .references('id')
         .inTable('questions')
-        .onDelete('SET NULL')
+        .onDelete('CASCADE')
         .index();
       table.uuid('userId');
     });
