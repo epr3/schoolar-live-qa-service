@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
         .uuid('id')
         .primary()
         .defaultTo(uuid());
-      table.string('code');
+      table.string('status');
       table.uuid('eventId');
     })
     .createTable('questions', table => {

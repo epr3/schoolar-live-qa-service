@@ -33,7 +33,10 @@ module.exports = {
   },
   async postSession(req, res, next) {
     try {
-      const session = await Session.forge({ ...req.body }).save();
+      const session = await Session.forge({
+        ...req.body,
+        status: 'open'
+      }).save();
       res.status(200).send(session.toJSON());
     } catch (e) {
       next(e);
