@@ -9,6 +9,9 @@ const router = Router();
 const sessionSchema = yup.object().shape({
   eventId: yup.string().required()
 });
+const updateSessionSchema = yup.object().shape({
+  status: yup.string().required()
+});
 
 router.get('/sessions', jwtMiddleware, sessionController.getSessions);
 router.get('/sessions/:id', jwtMiddleware, sessionController.getSession);
@@ -20,7 +23,7 @@ router.post(
 );
 router.put(
   '/sessions/:id',
-  validationMiddleware(sessionSchema),
+  validationMiddleware(updateSessionSchema),
   jwtMiddleware,
   sessionController.updateSession
 );

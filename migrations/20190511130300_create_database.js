@@ -8,6 +8,7 @@ exports.up = function(knex, Promise) {
         .defaultTo(uuid());
       table.string('status');
       table.uuid('eventId');
+      table.datetime('createdAt');
     })
     .createTable('questions', table => {
       table

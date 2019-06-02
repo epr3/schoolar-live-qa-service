@@ -26,6 +26,7 @@
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.16.5",
     "kue": "^0.11.6",
+    "luxon": "^1.15.0",
     "method-override": "^3.0.0",
     "morgan": "^1.9.1",
     "mysql2": "^1.6.4",

@@ -1,3 +1,4 @@
+const { DateTime } = require('luxon');
 const { Session } = require('../models');
 
 module.exports = {
@@ -35,7 +36,8 @@ module.exports = {
     try {
       const session = await Session.forge({
         ...req.body,
-        status: 'open'
+        status: 'open',
+        createdAt: DateTime.local().toISO()
       }).save();
       res.status(200).send(session.toJSON());
     } catch (e) {
