@@ -37,7 +37,7 @@ module.exports = {
       const session = await Session.forge({
         ...req.body,
         status: 'open',
-        createdAt: DateTime.local().toISO()
+        createdAt: DateTime.local().toSQL({ includeOffset: false })
       }).save();
       res.status(200).send(session.toJSON());
     } catch (e) {
